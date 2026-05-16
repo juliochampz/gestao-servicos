@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Gestão de Serviços</title>
+<title>Azola Assessoria Fiscal</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -126,6 +126,30 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 
 .empty{text-align:center;padding:36px 20px;color:var(--txt3);font-size:14px}
 .empty-icon{font-size:36px;margin-bottom:8px}
+/* Busca cliente */
+.cli-search-wrap{position:relative}
+.cli-search-wrap input{width:100%;padding:10px 12px;border:1.5px solid var(--borda);border-radius:10px;font-size:14px;color:var(--txt);background:var(--branco);font-family:inherit}
+.cli-search-wrap input:focus{outline:none;border-color:var(--az)}
+.cli-dropdown{display:none;position:absolute;top:110%;left:0;right:0;background:var(--branco);border:1.5px solid var(--az);border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:100;max-height:200px;overflow-y:auto}
+.cli-dropdown.open{display:block}
+.cli-opt{padding:10px 12px;cursor:pointer;font-size:14px;color:var(--txt);border-bottom:1px solid #f3f4f6}
+.cli-opt:last-child{border:none}
+.cli-opt:hover{background:var(--az-light)}
+.cli-selecionado{background:var(--az-light);border:1.5px solid var(--az);border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;color:var(--az);display:flex;align-items:center;justify-content:space-between}
+.cli-selecionado button{background:none;border:none;color:var(--txt3);cursor:pointer;font-size:16px}
+/* Tag vencimento próximo */
+.tag.vence-hoje{background:#fef3c7;color:#92400e;font-weight:700}
+.tag.vence-breve{background:#dbeafe;color:#1e40af}
+/* Vencimentos card */
+.venc-card{background:var(--branco);border-radius:10px;border:1px solid var(--borda);padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;border-left:3px solid var(--am);cursor:pointer}
+.venc-card:hover{background:#fffbeb}
+.venc-card.hoje{border-left-color:var(--vm)}
+.venc-info{flex:1}
+.venc-nome{font-size:13px;font-weight:600;color:var(--txt)}
+.venc-meta{font-size:11px;color:var(--txt3);margin-top:2px}
+.venc-valor{font-size:14px;font-weight:700;color:var(--am);flex-shrink:0;margin-right:8px}
+.btn-pagar-rapido{padding:4px 10px;border-radius:8px;border:1.5px solid var(--vd);color:var(--vd);background:var(--vd-light);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-pagar-rapido:hover{background:var(--vd);color:#fff}
 .spinner{width:28px;height:28px;border:3px solid var(--borda);border-top-color:var(--az);border-radius:50%;animation:spin .7s linear infinite;margin:20px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
@@ -136,9 +160,15 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 <div id="authScreen">
   <div class="auth-card">
     <div class="auth-logo">
-      <div class="icon">📋</div>
-      <h1>Gestão de Serviços</h1>
-      <p>Controle seus clientes e serviços</p>
+      <svg width="56" height="56" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:4px">
+        <polyline points="10,68 40,12 70,68" fill="none" stroke="#1A5FBB" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="23" y1="50" x2="57" y2="50" fill="none" stroke="#1A5FBB" stroke-width="4.5" stroke-linecap="round"/>
+        <rect x="8" y="71" width="44" height="3.5" rx="1.5" fill="#1A5FBB"/>
+        <circle cx="40" cy="12" r="5.5" fill="#9A7520"/>
+      </svg>
+      <h1 style="font-family:Georgia,serif;font-size:26px;letter-spacing:1px">AZOLA</h1>
+      <p style="letter-spacing:3px;font-size:11px;color:#4A6A9A;margin-top:2px">ASSESSORIA FISCAL</p>
+      <p style="color:#9A7520;font-size:11px;margin-top:4px;letter-spacing:1px">Precisão Que Transforma</p>
     </div>
     <div class="auth-err" id="authErr"></div>
     <div class="form-group"><label>E-mail</label><input id="lEmail" type="email" placeholder="seu@email.com"></div>
@@ -159,8 +189,19 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 <div id="app">
   <div class="topbar">
     <div>
-      <div style="color:#fff;font-size:16px;font-weight:700">📋 Gestão de Serviços</div>
-      <div class="topbar-sub" id="tbUser">—</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <svg width="32" height="32" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <polyline points="10,68 40,12 70,68" fill="none" stroke="#93c5fd" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="23" y1="50" x2="57" y2="50" fill="none" stroke="#93c5fd" stroke-width="4" stroke-linecap="round"/>
+          <rect x="8" y="71" width="44" height="3" rx="1.5" fill="#93c5fd"/>
+          <circle cx="40" cy="12" r="5" fill="#C9A84C"/>
+        </svg>
+        <div>
+          <div style="color:#fff;font-size:16px;font-weight:700;letter-spacing:.5px">AZOLA</div>
+          <div style="color:#93c5fd;font-size:10px;letter-spacing:2px">ASSESSORIA FISCAL</div>
+        </div>
+      </div>
+      <div style="color:#93c5fd;font-size:11px" id="tbUser">—</div>
     </div>
     <button class="user-menu" onclick="sair()">Sair</button>
   </div>
@@ -186,6 +227,9 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
       <div class="kpi"><div class="lbl">📋 Total</div><div class="val" id="kTotal" style="color:var(--az)">R$ 0</div><div class="sub">faturamento</div></div>
       <div class="kpi"><div class="lbl">👥 Serviços</div><div class="val" id="kServicos" style="color:var(--roxo)">0</div><div class="sub">no mês</div></div>
     </div>
+    <!-- Vencimentos próximos -->
+    <h3 style="font-size:13px;font-weight:600;color:var(--txt3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px">📅 Vencimentos nos próximos 7 dias</h3>
+    <div id="listaVencimentos" style="margin-bottom:16px"></div>
     <!-- Por tipo -->
     <h3 style="font-size:13px;font-weight:600;color:var(--txt3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px">Por tipo de serviço</h3>
     <div id="resumoPorTipo"></div>
@@ -193,6 +237,8 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
     <h3 style="font-size:13px;font-weight:600;color:var(--txt3);margin:12px 0 8px;text-transform:uppercase;letter-spacing:.3px">Fixos vs Esporádicos</h3>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="resumoFixos"></div>
   </div>
+
+  <!-- VENCIMENTOS PRÓXIMOS 7 DIAS (no resumo, inserido via JS) -->
 
   <!-- SERVIÇOS -->
   <div class="page" id="page-servicos">
@@ -245,7 +291,15 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
     </div>
     <div class="form-group">
       <label>Cliente</label>
-      <select id="mServCliente"><option value="">Selecione o cliente...</option></select>
+      <div id="cliSelecionadoWrap" style="display:none" class="cli-selecionado">
+        <span id="cliSelecionadoNome">—</span>
+        <button onclick="limparCliente()">✕</button>
+      </div>
+      <div class="cli-search-wrap" id="cliSearchWrap">
+        <input id="cliSearchInput" placeholder="🔍 Buscar cliente pelo nome..." oninput="filtrarClientes()" onfocus="abrirDropCli()" onblur="setTimeout(fecharDropCli,200)" autocomplete="off">
+        <div class="cli-dropdown" id="cliDropdown"></div>
+      </div>
+      <input type="hidden" id="mServCliente">
     </div>
     <div class="form-group">
       <label>Tipo de serviço</label>
@@ -253,13 +307,22 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
     </div>
     <div class="form-row">
       <div class="form-group"><label>Valor (R$)</label><input id="mServValor" type="number" step="0.01" min="0" placeholder="0,00"></div>
-      <div class="form-group"><label>Data</label><input id="mServData" type="date"></div>
+      <div class="form-group"><label>Previsão de pagamento</label><input id="mServData" type="date"></div>
     </div>
     <div class="form-group">
       <label>Tipo de cliente</label>
       <div class="pill-selector" id="pClienteTipo">
         <button class="pill-btn on" onclick="setPill('clienteTipo','fixo',this)">🔒 Fixo</button>
         <button class="pill-btn" onclick="setPill('clienteTipo','esporadico',this)">🔀 Esporádico</button>
+      </div>
+    </div>
+    <div class="form-group" id="grpReplicar" style="display:none">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+        <input type="checkbox" id="chkReplicar" style="width:auto"> Replicar para os próximos meses automaticamente
+      </label>
+      <div id="grpMesesRep" style="display:none;margin-top:8px">
+        <label style="font-size:12px">Quantos meses?</label>
+        <input id="mesesRep" type="number" min="1" max="24" value="12" style="width:80px;margin-top:4px">
       </div>
     </div>
     <div class="form-group">
@@ -388,6 +451,42 @@ function renderAll(){
   renderClientes();
   renderTipos();
   renderHistorico();
+  renderVencimentos();
+}
+
+function renderVencimentos(){
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  const em7=new Date(hoje); em7.setDate(hoje.getDate()+7);
+  const el=$('listaVencimentos'); if(!el) return;
+
+  const venc=Object.entries(dados.servicos)
+    .map(([k,v])=>({...v,id:k}))
+    .filter(s=>{
+      if(s.pago==='pago') return false;
+      if(!s.data) return false;
+      const d=new Date(s.data+'T00:00:00');
+      return d>=hoje && d<=em7;
+    })
+    .sort((a,b)=>a.data.localeCompare(b.data));
+
+  if(!venc.length){
+    el.innerHTML='<div style="font-size:13px;color:var(--txt3);padding:8px 0">Nenhum vencimento nos próximos 7 dias 🎉</div>';
+    return;
+  }
+  el.innerHTML=venc.map(s=>{
+    const d=new Date(s.data+'T00:00:00');
+    const isHoje=d.getTime()===hoje.getTime();
+    const diffDias=Math.round((d-hoje)/(86400000));
+    const label=isHoje?'Vence hoje!':`Em ${diffDias} dia${diffDias!==1?'s':''}`;
+    return `<div class="venc-card${isHoje?' hoje':''}" onclick="togglePago('${s.id}','${s.pago}')">
+      <div class="venc-info">
+        <div class="venc-nome">${s.clienteNome}</div>
+        <div class="venc-meta">${s.tipo} · ${s.data} · <strong style="color:${isHoje?'var(--vm)':'var(--am)'}">${label}</strong></div>
+      </div>
+      <span class="venc-valor">${'R$ '+Number(s.valor).toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
+      <button class="btn-pagar-rapido" onclick="event.stopPropagation();togglePago('${s.id}','${s.pago}')">✅ Pagar</button>
+    </div>`;
+  }).join('');
 }
 
 function getServMes(mk){
@@ -443,8 +542,8 @@ function renderServicos(mk){
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
         <span class="serv-valor">${R(s.valor)}</span>
-        <button class="btn-pago-toggle ${s.pago}" onclick="togglePago('${s.id}','${s.pago}')">
-          ${s.pago==='pago'?'✅ Pago':'⏳ Pendente'}
+        <button class="btn-pago-toggle ${s.pago}" onclick="togglePago('${s.id}','${s.pago}')" title="${s.pago==='pendente'?'Clique para marcar como pago':'Clique para marcar como pendente'}">
+          ${s.pago==='pago'?'✅ Pago':'⏳ Toque para pagar'}
         </button>
       </div>
       <div class="serv-actions">
@@ -522,16 +621,41 @@ function renderHistorico(){
 }
 
 // ── MODAIS ────────────────────────────────────────
+// ── BUSCA DE CLIENTE ──────────────────────────────
+let _cliSelecionadoId='', _cliSelecionadoNome='';
+
+window.filtrarClientes=()=>{
+  const q=$('cliSearchInput').value.toLowerCase();
+  const dd=$('cliDropdown');
+  const clis=Object.entries(dados.clientes)
+    .filter(([,v])=>v.nome.toLowerCase().includes(q))
+    .sort((a,b)=>a[1].nome.localeCompare(b[1].nome));
+  dd.innerHTML=clis.map(([k,v])=>`<div class="cli-opt" onmousedown="selecionarCliente('${k}','${v.nome}')">${v.nome}</div>`).join('') || '<div class="cli-opt" style="color:var(--txt3)">Nenhum cliente encontrado</div>';
+  dd.classList.add('open');
+};
+window.abrirDropCli=()=>{
+  $('cliSearchInput').value='';
+  filtrarClientes();
+};
+window.fecharDropCli=()=>$('cliDropdown').classList.remove('open');
+window.selecionarCliente=(id,nome)=>{
+  _cliSelecionadoId=id; _cliSelecionadoNome=nome;
+  $('mServCliente').value=id;
+  $('cliSelecionadoNome').textContent=nome;
+  $('cliSelecionadoWrap').style.display='flex';
+  $('cliSearchWrap').style.display='none';
+  fecharDropCli();
+};
+window.limparCliente=()=>{
+  _cliSelecionadoId=''; _cliSelecionadoNome='';
+  $('mServCliente').value='';
+  $('cliSelecionadoWrap').style.display='none';
+  $('cliSearchWrap').style.display='';
+  $('cliSearchInput').value='';
+};
+
 function preencherSelects(){
-  // Clientes
-  const cliSel=$('mServCliente');
-  const cliAtual=cliSel.value;
-  cliSel.innerHTML='<option value="">Selecione o cliente...</option>';
-  Object.entries(dados.clientes).sort((a,b)=>a[1].nome.localeCompare(b[1].nome)).forEach(([k,v])=>{
-    cliSel.innerHTML+=`<option value="${k}">${v.nome}</option>`;
-  });
-  if(cliAtual) cliSel.value=cliAtual;
-  // Tipos
+  // Tipos apenas
   const tipSel=$('mServTipo');
   const tipAtual=tipSel.value;
   tipSel.innerHTML='<option value="">Selecione o tipo...</option>';
@@ -547,7 +671,10 @@ window.abrirModalServ=id=>{
   $('mServTitulo').textContent=id?'Editar Serviço':'Novo Serviço';
   if(id){
     const s=dados.servicos[id];
-    $('mServCliente').value=s.clienteId||'';
+    // Preencher cliente
+    if(s.clienteId&&dados.clientes[s.clienteId]){
+      selecionarCliente(s.clienteId,dados.clientes[s.clienteId].nome);
+    } else { limparCliente(); }
     $('mServTipo').value=s.tipo||'';
     $('mServValor').value=s.valor;
     $('mServData').value=s.data||'';
@@ -555,7 +682,8 @@ window.abrirModalServ=id=>{
     $('mServDataPag').value=s.dataPagamento||'';
     pills={clienteTipo:s.clienteTipo||'fixo',servPago:s.pago||'pendente'};
   } else {
-    $('mServCliente').value='';$('mServTipo').value='';
+    limparCliente();
+    $('mServTipo').value='';
     $('mServValor').value='';$('mServObs').value='';
     $('mServData').value=new Date().toISOString().split('T')[0];
     $('mServDataPag').value='';
@@ -563,6 +691,9 @@ window.abrirModalServ=id=>{
   }
   syncPills();
   $('grpDataPag').style.display=pills.servPago==='pago'?'':'none';
+  $('grpReplicar').style.display=pills.clienteTipo==='fixo'&&!id?'':'none';
+  if($('chkReplicar')) $('chkReplicar').checked=false;
+  if($('grpMesesRep')) $('grpMesesRep').style.display='none';
   $('modalServ').classList.add('open');
 };
 window.fecharModalServ=()=>$('modalServ').classList.remove('open');
@@ -582,8 +713,23 @@ window.salvarServ=async()=>{
     obs:$('mServObs').value.trim(), ts:Date.now()
   };
   const eid=$('mServId').value;
-  if(eid) await set(ref(db,'gs_servicos/'+eid),item);
-  else await push(ref(db,'gs_servicos'),item);
+  if(eid){
+    await set(ref(db,'gs_servicos/'+eid),item);
+  } else {
+    await push(ref(db,'gs_servicos'),item);
+    // Replicar meses futuros se fixo
+    if(pills.clienteTipo==='fixo'&&$('chkReplicar')?.checked){
+      const meses=parseInt($('mesesRep')?.value||12);
+      const [ano,mes,dia]=data.split('-');
+      for(let i=1;i<=meses;i++){
+        const d=new Date(+ano,+mes-1+i,+dia);
+        // Ajustar dia se mês não tem o dia (ex: 31 em fevereiro)
+        if(d.getDate()!==+dia) d.setDate(0);
+        const novaData=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        await push(ref(db,'gs_servicos'),{...item,data:novaData,mes:novaData.substring(0,7),pago:'pendente',dataPagamento:'',ts:Date.now()+i});
+      }
+    }
+  }
   fecharModalServ();
 };
 window.excluirServ=id=>{if(confirm('Excluir este serviço?'))remove(ref(db,'gs_servicos/'+id));};
@@ -630,7 +776,18 @@ window.setPill=(g,v,btn)=>{
   btn.closest('.pill-selector').querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   if(g==='servPago') $('grpDataPag').style.display=v==='pago'?'':'none';
+  if(g==='clienteTipo'){
+    const isNew=!$('mServId').value;
+    $('grpReplicar').style.display=(v==='fixo'&&isNew)?'':'none';
+  }
 };
+
+// checkbox replicar
+document.addEventListener('change',e=>{
+  if(e.target.id==='chkReplicar'){
+    $('grpMesesRep').style.display=e.target.checked?'':'none';
+  }
+});
 function syncPills(){
   [['pClienteTipo','clienteTipo'],['pServPago','servPago']].forEach(([pid,key])=>{
     $(pid)?.querySelectorAll('.pill-btn').forEach(b=>{
