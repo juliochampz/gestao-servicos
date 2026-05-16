@@ -555,9 +555,22 @@ function renderServicos(mk){
 
 window.togglePago=async(id,atual)=>{
   const novo=atual==='pago'?'pendente':'pago';
-  const updates={pago:novo};
-  if(novo==='pago') updates.dataPagamento=new Date().toISOString().split('T')[0];
-  await set(ref(db,'gs_servicos/'+id),{...dados.servicos[id],id:undefined,...updates});
+  const original=dados.servicos[id];
+  if(!original) return;
+  const item={
+    clienteId:original.clienteId||'',
+    clienteNome:original.clienteNome||'',
+    tipo:original.tipo||'',
+    valor:original.valor||0,
+    data:original.data||'',
+    mes:original.mes||'',
+    clienteTipo:original.clienteTipo||'fixo',
+    obs:original.obs||'',
+    ts:original.ts||Date.now(),
+    pago:novo,
+    dataPagamento:novo==='pago'?new Date().toISOString().split('T')[0]:(original.dataPagamento||'')
+  };
+  await set(ref(db,'gs_servicos/'+id),item);
 };
 
 window.renderClientes=()=>{
