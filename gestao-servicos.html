@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Gestão de Serviços</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --az:#1a56db;--az2:#1e429f;--az-light:#ebf5ff;
+  --vd:#057a55;--vd-light:#f3faf7;
+  --vm:#e02424;--vm-light:#fdf2f2;
+  --am:#d97706;--am-light:#fffbeb;
+  --roxo:#7e3af2;--roxo-light:#f5f3ff;
+  --borda:#e5e7eb;--bg:#f9fafb;--branco:#fff;
+  --txt:#111827;--txt2:#374151;--txt3:#6b7280;
+}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+
+/* ── AUTH ── */
+#authScreen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:linear-gradient(135deg,#1e3a8a,#1a56db)}
+.auth-card{background:var(--branco);border-radius:20px;padding:36px 28px;width:100%;max-width:380px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.auth-logo{text-align:center;margin-bottom:28px}
+.auth-logo .icon{font-size:44px;margin-bottom:8px}
+.auth-logo h1{font-size:22px;font-weight:700;color:var(--az2)}
+.auth-logo p{font-size:13px;color:var(--txt3);margin-top:4px}
+.form-group{margin-bottom:14px}
+.form-group label{font-size:12px;font-weight:600;color:var(--txt3);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border:1.5px solid var(--borda);border-radius:10px;font-size:14px;color:var(--txt);background:var(--branco);font-family:inherit}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--az)}
+.form-group textarea{resize:none;min-height:72px}
+.btn-primary{background:var(--az);color:#fff;border:none;padding:12px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;width:100%;font-family:inherit}
+.btn-primary:hover{background:var(--az2)}
+.auth-err{background:var(--vm-light);border:1px solid #fecaca;border-radius:8px;padding:10px 12px;font-size:13px;color:var(--vm);margin-bottom:14px;display:none}
+.auth-switch{text-align:center;font-size:13px;color:var(--txt3);margin-top:14px}
+.auth-switch span{color:var(--az);cursor:pointer;font-weight:600}
+
+/* ── APP ── */
+#app{display:none;padding-bottom:70px;min-height:100vh}
+.topbar{background:var(--az);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar h1{color:#fff;font-size:16px;font-weight:700}
+.topbar-sub{color:#93c5fd;font-size:11px;margin-top:1px}
+.user-menu{background:rgba(255,255,255,.15);color:#fff;font-size:12px;padding:4px 10px;border-radius:20px;border:none;cursor:pointer}
+
+.nav-tabs{background:var(--branco);border-bottom:1px solid var(--borda);display:flex;overflow-x:auto;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.tab{padding:11px 14px;font-size:12px;font-weight:500;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
+.tab.active{color:var(--az);border-bottom-color:var(--az);font-weight:600}
+
+.page{display:none;padding:14px}
+.page.active{display:block}
+
+/* ── KPIs ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
+@media(min-width:600px){.kpi-grid{grid-template-columns:repeat(4,1fr)}}
+.kpi{background:var(--branco);border-radius:12px;padding:14px;border:1px solid var(--borda)}
+.kpi .lbl{font-size:11px;color:var(--txt3);margin-bottom:4px}
+.kpi .val{font-size:20px;font-weight:700}
+.kpi .sub{font-size:10px;color:var(--txt3);margin-top:2px}
+
+/* ── MÊS NAV ── */
+.mes-nav{display:flex;align-items:center;gap:8px;margin-bottom:14px;background:var(--branco);padding:9px 14px;border-radius:10px;border:1px solid var(--borda)}
+.mes-nav button{background:none;border:none;cursor:pointer;color:var(--az);font-size:20px;font-weight:700;padding:0 6px}
+.mes-nav span{flex:1;text-align:center;font-size:14px;font-weight:600;color:var(--txt)}
+
+/* ── SECTION HDR ── */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.sec-hdr h3{font-size:14px;font-weight:600;color:var(--txt)}
+.btn-add{background:var(--az);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit}
+
+/* ── SERVIÇO CARD ── */
+.serv-card{background:var(--branco);border-radius:12px;border:1px solid var(--borda);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.serv-card.pago{border-left:3px solid var(--vd)}
+.serv-card.pendente{border-left:3px solid var(--am)}
+.serv-info{flex:1;min-width:0}
+.serv-nome{font-size:14px;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.serv-meta{font-size:11px;color:var(--txt3);margin-top:3px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600}
+.tag.fixo{background:#dbeafe;color:#1e40af}
+.tag.esporadico{background:#fef3c7;color:#92400e}
+.tag.pago{background:var(--vd-light);color:var(--vd)}
+.tag.pendente{background:var(--am-light);color:var(--am)}
+.serv-valor{font-size:15px;font-weight:700;color:var(--txt);flex-shrink:0}
+.serv-actions{display:flex;gap:6px;flex-shrink:0}
+.btn-pago-toggle{padding:5px 10px;border-radius:8px;border:1.5px solid;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-pago-toggle.pendente{border-color:var(--am);color:var(--am);background:var(--am-light)}
+.btn-pago-toggle.pago{border-color:var(--vd);color:var(--vd);background:var(--vd-light)}
+.btn-icon{background:none;border:none;cursor:pointer;color:var(--txt3);padding:4px;border-radius:6px;font-size:14px}
+
+/* ── CLIENTE CARD ── */
+.cli-card{background:var(--branco);border-radius:12px;border:1px solid var(--borda);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.cli-avatar{width:40px;height:40px;border-radius:50%;background:var(--az);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
+.cli-info{flex:1;min-width:0}
+.cli-nome{font-size:14px;font-weight:600;color:var(--txt)}
+.cli-tel{font-size:12px;color:var(--txt3);margin-top:2px}
+.cli-obs{font-size:12px;color:var(--txt3);margin-top:3px;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ── TIPO CARD ── */
+.tipo-card{background:var(--branco);border-radius:10px;border:1px solid var(--borda);padding:10px 14px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.tipo-nome{font-size:14px;font-weight:500;color:var(--txt)}
+
+/* ── HIST ── */
+.hist-card{background:var(--branco);border-radius:12px;border:1px solid var(--borda);margin-bottom:10px;overflow:hidden}
+.hist-hdr{padding:12px 14px;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.hist-hdr h4{font-size:14px;font-weight:600;color:var(--txt)}
+.hist-body{padding:10px 14px}
+.hist-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f3f4f6;font-size:13px}
+.hist-row:last-child{border:none}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center}
+@media(min-width:600px){.modal-overlay{align-items:center}}
+.modal-overlay.open{display:flex}
+.modal{background:var(--branco);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto}
+@media(min-width:600px){.modal{border-radius:16px}}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.modal-hdr h3{font-size:16px;font-weight:700;color:var(--txt)}
+.btn-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--txt3)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-salvar{background:var(--az);color:#fff;border:none;padding:12px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;width:100%;margin-top:6px;font-family:inherit}
+.pill-selector{display:flex;gap:8px;flex-wrap:wrap}
+.pill-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--borda);background:var(--branco);cursor:pointer;font-size:13px;font-weight:500;color:var(--txt3);font-family:inherit}
+.pill-btn.on{border-color:var(--az);background:var(--az-light);color:var(--az)}
+
+.empty{text-align:center;padding:36px 20px;color:var(--txt3);font-size:14px}
+.empty-icon{font-size:36px;margin-bottom:8px}
+.spinner{width:28px;height:28px;border:3px solid var(--borda);border-top-color:var(--az);border-radius:50%;animation:spin .7s linear infinite;margin:20px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="icon">📋</div>
+      <h1>Gestão de Serviços</h1>
+      <p>Controle seus clientes e serviços</p>
+    </div>
+    <div class="auth-err" id="authErr"></div>
+    <div class="form-group"><label>E-mail</label><input id="lEmail" type="email" placeholder="seu@email.com"></div>
+    <div class="form-group"><label>Senha</label><input id="lSenha" type="password" placeholder="••••••••"></div>
+    <button class="btn-primary" onclick="fazerLogin()">Entrar →</button>
+    <div class="auth-switch" id="authSwitch">Não tem conta? <span onclick="mostrarCadastro()">Criar conta</span></div>
+
+    <div id="cadastroForm" style="display:none;margin-top:16px;border-top:1px solid var(--borda);padding-top:16px">
+      <div class="form-group"><label>Seu nome</label><input id="cNome" placeholder="Ex: Maria"></div>
+      <div class="form-group"><label>E-mail</label><input id="cEmail" type="email" placeholder="seu@email.com"></div>
+      <div class="form-group"><label>Senha</label><input id="cSenha" type="password" placeholder="Mínimo 6 caracteres"></div>
+      <button class="btn-primary" onclick="fazerCadastro()" style="background:var(--vd)">Criar conta →</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div>
+      <div style="color:#fff;font-size:16px;font-weight:700">📋 Gestão de Serviços</div>
+      <div class="topbar-sub" id="tbUser">—</div>
+    </div>
+    <button class="user-menu" onclick="sair()">Sair</button>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="tab active" data-page="resumo" onclick="showPage(this)">📊 Resumo</button>
+    <button class="tab" data-page="servicos" onclick="showPage(this)">📋 Serviços</button>
+    <button class="tab" data-page="clientes" onclick="showPage(this)">👥 Clientes</button>
+    <button class="tab" data-page="tipos" onclick="showPage(this)">🔧 Tipos</button>
+    <button class="tab" data-page="historico" onclick="showPage(this)">📅 Histórico</button>
+  </div>
+
+  <!-- RESUMO -->
+  <div class="page active" id="page-resumo">
+    <div class="mes-nav">
+      <button onclick="moveMes(-1)">‹</button>
+      <span id="lblMes">—</span>
+      <button onclick="moveMes(1)">›</button>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="lbl">💰 Recebido</div><div class="val" id="kRecebido" style="color:var(--vd)">R$ 0</div><div class="sub">no mês</div></div>
+      <div class="kpi"><div class="lbl">⏳ Pendente</div><div class="val" id="kPendente" style="color:var(--am)">R$ 0</div><div class="sub">a receber</div></div>
+      <div class="kpi"><div class="lbl">📋 Total</div><div class="val" id="kTotal" style="color:var(--az)">R$ 0</div><div class="sub">faturamento</div></div>
+      <div class="kpi"><div class="lbl">👥 Serviços</div><div class="val" id="kServicos" style="color:var(--roxo)">0</div><div class="sub">no mês</div></div>
+    </div>
+    <!-- Por tipo -->
+    <h3 style="font-size:13px;font-weight:600;color:var(--txt3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px">Por tipo de serviço</h3>
+    <div id="resumoPorTipo"></div>
+    <!-- Fixos vs Esporádicos -->
+    <h3 style="font-size:13px;font-weight:600;color:var(--txt3);margin:12px 0 8px;text-transform:uppercase;letter-spacing:.3px">Fixos vs Esporádicos</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="resumoFixos"></div>
+  </div>
+
+  <!-- SERVIÇOS -->
+  <div class="page" id="page-servicos">
+    <div class="mes-nav">
+      <button onclick="moveMes(-1)">‹</button>
+      <span id="lblMes2">—</span>
+      <button onclick="moveMes(1)">›</button>
+    </div>
+    <div class="sec-hdr">
+      <h3>Serviços do mês</h3>
+      <button class="btn-add" onclick="abrirModalServ(null)">＋ Novo</button>
+    </div>
+    <div id="listaServicos"><div class="spinner"></div></div>
+  </div>
+
+  <!-- CLIENTES -->
+  <div class="page" id="page-clientes">
+    <div class="sec-hdr">
+      <h3>Clientes cadastrados</h3>
+      <button class="btn-add" onclick="abrirModalCli(null)">＋ Novo</button>
+    </div>
+    <div class="form-group" style="margin-bottom:10px">
+      <input id="buscaCliente" placeholder="🔍 Buscar cliente..." oninput="renderClientes()">
+    </div>
+    <div id="listaClientes"><div class="spinner"></div></div>
+  </div>
+
+  <!-- TIPOS -->
+  <div class="page" id="page-tipos">
+    <div class="sec-hdr">
+      <h3>Tipos de serviço</h3>
+      <button class="btn-add" onclick="abrirModalTipo(null)">＋ Novo</button>
+    </div>
+    <div id="listaTipos"><div class="spinner"></div></div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div class="page" id="page-historico">
+    <h3 style="font-size:14px;font-weight:600;margin-bottom:12px">Histórico por mês</h3>
+    <div id="listaHistorico"><div class="spinner"></div></div>
+  </div>
+</div>
+
+<!-- MODAL SERVIÇO -->
+<div class="modal-overlay" id="modalServ" onclick="if(event.target===this)fecharModalServ()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="mServTitulo">Novo Serviço</h3>
+      <button class="btn-close" onclick="fecharModalServ()">✕</button>
+    </div>
+    <div class="form-group">
+      <label>Cliente</label>
+      <select id="mServCliente"><option value="">Selecione o cliente...</option></select>
+    </div>
+    <div class="form-group">
+      <label>Tipo de serviço</label>
+      <select id="mServTipo"><option value="">Selecione o tipo...</option></select>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Valor (R$)</label><input id="mServValor" type="number" step="0.01" min="0" placeholder="0,00"></div>
+      <div class="form-group"><label>Data</label><input id="mServData" type="date"></div>
+    </div>
+    <div class="form-group">
+      <label>Tipo de cliente</label>
+      <div class="pill-selector" id="pClienteTipo">
+        <button class="pill-btn on" onclick="setPill('clienteTipo','fixo',this)">🔒 Fixo</button>
+        <button class="pill-btn" onclick="setPill('clienteTipo','esporadico',this)">🔀 Esporádico</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Situação</label>
+      <div class="pill-selector" id="pServPago">
+        <button class="pill-btn on" onclick="setPill('servPago','pendente',this)">⏳ Pendente</button>
+        <button class="pill-btn" onclick="setPill('servPago','pago',this)">✅ Pago</button>
+      </div>
+    </div>
+    <div class="form-group" id="grpDataPag" style="display:none">
+      <label>Data do pagamento</label>
+      <input id="mServDataPag" type="date">
+    </div>
+    <div class="form-group"><label>Observação (opcional)</label><textarea id="mServObs" placeholder="Alguma nota sobre este serviço..."></textarea></div>
+    <input type="hidden" id="mServId">
+    <button class="btn-salvar" onclick="salvarServ()">💾 Salvar</button>
+  </div>
+</div>
+
+<!-- MODAL CLIENTE -->
+<div class="modal-overlay" id="modalCli" onclick="if(event.target===this)fecharModalCli()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="mCliTitulo">Novo Cliente</h3>
+      <button class="btn-close" onclick="fecharModalCli()">✕</button>
+    </div>
+    <div class="form-group"><label>Nome</label><input id="mCliNome" placeholder="Nome completo"></div>
+    <div class="form-group"><label>Telefone</label><input id="mCliTel" type="tel" placeholder="(00) 00000-0000"></div>
+    <div class="form-group"><label>Observação</label><textarea id="mCliObs" placeholder="Informações importantes sobre o cliente..."></textarea></div>
+    <input type="hidden" id="mCliId">
+    <button class="btn-salvar" onclick="salvarCli()">💾 Salvar</button>
+  </div>
+</div>
+
+<!-- MODAL TIPO -->
+<div class="modal-overlay" id="modalTipo" onclick="if(event.target===this)fecharModalTipo()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3 id="mTipoTitulo">Novo Tipo de Serviço</h3>
+      <button class="btn-close" onclick="fecharModalTipo()">✕</button>
+    </div>
+    <div class="form-group"><label>Nome do tipo</label><input id="mTipoNome" placeholder="Ex: Declaração de IR"></div>
+    <input type="hidden" id="mTipoId">
+    <button class="btn-salvar" onclick="salvarTipo()">💾 Salvar</button>
+  </div>
+</div>
+
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,updateProfile}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import{getDatabase,ref,push,set,get,remove,onValue,query,orderByChild}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+const CFG={
+  apiKey:'AIzaSyC54FUgmARdcGjy1tOVNerFMPvcBL921MI',
+  authDomain:'despesas-c2f24.firebaseapp.com',
+  databaseURL:'https://despesas-c2f24-default-rtdb.firebaseio.com',
+  projectId:'despesas-c2f24'
+};
+
+const app=initializeApp(CFG,'gestao');
+const auth=getAuth(app);
+const db=getDatabase(app);
+
+const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const R=v=>'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2});
+const mkMes=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+const lbMes=d=>`${MESES[d.getMonth()]} ${d.getFullYear()}`;
+const iniciais=n=>(n||'?').split(' ').map(p=>p[0]).join('').toUpperCase().slice(0,2);
+const $=id=>document.getElementById(id);
+
+let mesAtual=new Date(), user=null;
+let dados={servicos:{},clientes:{},tipos:{}};
+let pills={clienteTipo:'fixo',servPago:'pendente'};
+
+// Tipos padrão
+const TIPOS_PADRAO=['Abertura de empresa','Fechamento de empresa','Emissão de notas','Imposto de renda','Regularização de CPF'];
+
+// ── AUTH ──────────────────────────────────────────
+window.mostrarCadastro=()=>{
+  $('cadastroForm').style.display=$('cadastroForm').style.display==='none'?'':'none';
+  $('authSwitch').style.display=$('cadastroForm').style.display==='none'?'':'none';
+};
+function showErr(m){$('authErr').textContent=m;$('authErr').style.display='block';}
+
+window.fazerLogin=async()=>{
+  const e=$('lEmail').value.trim(),s=$('lSenha').value;
+  if(!e||!s){showErr('Preencha e-mail e senha');return;}
+  try{await signInWithEmailAndPassword(auth,e,s);}
+  catch{showErr('E-mail ou senha incorretos.');}
+};
+
+window.fazerCadastro=async()=>{
+  const nome=$('cNome').value.trim(),e=$('cEmail').value.trim(),s=$('cSenha').value;
+  if(!nome||!e||!s){showErr('Preencha todos os campos');return;}
+  if(s.length<6){showErr('Senha mínimo 6 caracteres');return;}
+  try{
+    const c=await createUserWithEmailAndPassword(auth,e,s);
+    await updateProfile(c.user,{displayName:nome});
+    // Criar tipos padrão na primeira vez
+    const snap=await get(ref(db,'gs_tipos'));
+    if(!snap.exists()){
+      for(const t of TIPOS_PADRAO) await push(ref(db,'gs_tipos'),{nome:t,ts:Date.now()});
+    }
+  }catch(err){showErr(err.code==='auth/email-already-in-use'?'E-mail já cadastrado':'Erro ao criar conta.');}
+};
+
+window.sair=()=>{if(confirm('Sair?'))signOut(auth);};
+
+// ── NAVEGAÇÃO ─────────────────────────────────────
+window.showPage=btn=>{
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  $('page-'+btn.dataset.page).classList.add('active');
+  btn.classList.add('active');
+  renderAll();
+};
+
+window.moveMes=d=>{mesAtual=new Date(mesAtual.getFullYear(),mesAtual.getMonth()+d,1);renderAll();};
+
+// ── RENDER ────────────────────────────────────────
+function renderAll(){
+  const mk=mkMes(mesAtual),lb=lbMes(mesAtual);
+  ['lblMes','lblMes2'].forEach(id=>{const e=$(id);if(e)e.textContent=lb;});
+  renderResumo(mk);
+  renderServicos(mk);
+  renderClientes();
+  renderTipos();
+  renderHistorico();
+}
+
+function getServMes(mk){
+  return Object.entries(dados.servicos)
+    .filter(([,v])=>v.mes===mk)
+    .map(([k,v])=>({...v,id:k}))
+    .sort((a,b)=>b.ts-a.ts);
+}
+
+function renderResumo(mk){
+  const servs=getServMes(mk);
+  const recebido=servs.filter(s=>s.pago==='pago').reduce((t,s)=>t+s.valor,0);
+  const pendente=servs.filter(s=>s.pago==='pendente').reduce((t,s)=>t+s.valor,0);
+  $('kRecebido').textContent=R(recebido);
+  $('kPendente').textContent=R(pendente);
+  $('kTotal').textContent=R(recebido+pendente);
+  $('kServicos').textContent=servs.length;
+
+  // Por tipo
+  const porTipo={};
+  servs.forEach(s=>{porTipo[s.tipo]=(porTipo[s.tipo]||0)+s.valor;});
+  const tiposEl=$('resumoPorTipo');
+  tiposEl.innerHTML=Object.keys(porTipo).length?Object.entries(porTipo).map(([t,v])=>`
+    <div class="hist-card" style="margin-bottom:8px">
+      <div class="hist-row" style="padding:10px 14px;border:none">
+        <span style="font-size:13px;font-weight:500">${t||'—'}</span>
+        <span style="font-weight:700;color:var(--az)">${R(v)}</span>
+      </div>
+    </div>`).join(''):'<div class="empty" style="padding:20px"><div class="empty-icon">📊</div>Nenhum serviço neste mês</div>';
+
+  // Fixos vs Esporádicos
+  const fixoV=servs.filter(s=>s.clienteTipo==='fixo').reduce((t,s)=>t+s.valor,0);
+  const espV=servs.filter(s=>s.clienteTipo==='esporadico').reduce((t,s)=>t+s.valor,0);
+  $('resumoFixos').innerHTML=`
+    <div class="kpi"><div class="lbl">🔒 Fixos</div><div class="val" style="font-size:16px;color:var(--az)">${R(fixoV)}</div><div class="sub">${servs.filter(s=>s.clienteTipo==='fixo').length} serviços</div></div>
+    <div class="kpi"><div class="lbl">🔀 Esporádicos</div><div class="val" style="font-size:16px;color:var(--roxo)">${R(espV)}</div><div class="sub">${servs.filter(s=>s.clienteTipo==='esporadico').length} serviços</div></div>`;
+}
+
+function renderServicos(mk){
+  const servs=getServMes(mk);
+  const el=$('listaServicos');
+  if(!servs.length){el.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Nenhum serviço neste mês</div>';return;}
+  el.innerHTML=servs.map(s=>`
+    <div class="serv-card ${s.pago}">
+      <div class="serv-info">
+        <div class="serv-nome">${s.clienteNome||'—'}</div>
+        <div class="serv-meta">
+          <span>${s.tipo||'—'}</span>
+          <span class="tag ${s.clienteTipo}">${s.clienteTipo==='fixo'?'🔒 Fixo':'🔀 Esporádico'}</span>
+          ${s.data?`<span>${s.data}</span>`:''}
+          ${s.obs?`<span style="font-style:italic">${s.obs}</span>`:''}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+        <span class="serv-valor">${R(s.valor)}</span>
+        <button class="btn-pago-toggle ${s.pago}" onclick="togglePago('${s.id}','${s.pago}')">
+          ${s.pago==='pago'?'✅ Pago':'⏳ Pendente'}
+        </button>
+      </div>
+      <div class="serv-actions">
+        <button class="btn-icon" onclick="abrirModalServ('${s.id}')">✏️</button>
+        <button class="btn-icon" onclick="excluirServ('${s.id}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+window.togglePago=async(id,atual)=>{
+  const novo=atual==='pago'?'pendente':'pago';
+  const updates={pago:novo};
+  if(novo==='pago') updates.dataPagamento=new Date().toISOString().split('T')[0];
+  await set(ref(db,'gs_servicos/'+id),{...dados.servicos[id],id:undefined,...updates});
+};
+
+window.renderClientes=()=>{
+  const q=($('buscaCliente')?.value||'').toLowerCase();
+  const clis=Object.entries(dados.clientes)
+    .map(([k,v])=>({...v,id:k}))
+    .filter(c=>!q||c.nome.toLowerCase().includes(q)||c.tel?.includes(q))
+    .sort((a,b)=>a.nome.localeCompare(b.nome));
+  const el=$('listaClientes');
+  if(!clis.length){el.innerHTML='<div class="empty"><div class="empty-icon">👥</div>Nenhum cliente cadastrado</div>';return;}
+  el.innerHTML=clis.map(c=>`
+    <div class="cli-card">
+      <div class="cli-avatar">${iniciais(c.nome)}</div>
+      <div class="cli-info">
+        <div class="cli-nome">${c.nome}</div>
+        ${c.tel?`<div class="cli-tel">📞 ${c.tel}</div>`:''}
+        ${c.obs?`<div class="cli-obs">${c.obs}</div>`:''}
+      </div>
+      <div class="serv-actions">
+        <button class="btn-icon" onclick="abrirModalCli('${c.id}')">✏️</button>
+        <button class="btn-icon" onclick="excluirCli('${c.id}')">🗑️</button>
+      </div>
+    </div>`).join('');
+};
+
+function renderTipos(){
+  const tipos=Object.entries(dados.tipos).map(([k,v])=>({...v,id:k})).sort((a,b)=>a.nome.localeCompare(b.nome));
+  const el=$('listaTipos');
+  if(!tipos.length){el.innerHTML='<div class="empty"><div class="empty-icon">🔧</div>Nenhum tipo cadastrado</div>';return;}
+  el.innerHTML=tipos.map(t=>`
+    <div class="tipo-card">
+      <span class="tipo-nome">🔧 ${t.nome}</span>
+      <div class="serv-actions">
+        <button class="btn-icon" onclick="abrirModalTipo('${t.id}')">✏️</button>
+        <button class="btn-icon" onclick="excluirTipo('${t.id}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderHistorico(){
+  const meses=[...new Set(Object.values(dados.servicos).map(s=>s.mes))].filter(Boolean).sort().reverse();
+  const el=$('listaHistorico');
+  if(!meses.length){el.innerHTML='<div class="empty"><div class="empty-icon">📅</div>Sem histórico ainda</div>';return;}
+  el.innerHTML=meses.map(mk=>{
+    const [ano,m]=mk.split('-');
+    const servs=Object.values(dados.servicos).filter(s=>s.mes===mk);
+    const rec=servs.filter(s=>s.pago==='pago').reduce((t,s)=>t+s.valor,0);
+    const pend=servs.filter(s=>s.pago==='pendente').reduce((t,s)=>t+s.valor,0);
+    return `<div class="hist-card">
+      <div class="hist-hdr">
+        <h4>${MESES[+m-1]} ${ano}</h4>
+        <span style="font-weight:700;color:var(--az)">${R(rec+pend)}</span>
+      </div>
+      <div class="hist-body">
+        <div class="hist-row"><span>✅ Recebido</span><span style="color:var(--vd);font-weight:600">${R(rec)}</span></div>
+        <div class="hist-row"><span>⏳ Pendente</span><span style="color:var(--am);font-weight:600">${R(pend)}</span></div>
+        <div class="hist-row"><span>📋 Serviços</span><span>${servs.length}</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── MODAIS ────────────────────────────────────────
+function preencherSelects(){
+  // Clientes
+  const cliSel=$('mServCliente');
+  const cliAtual=cliSel.value;
+  cliSel.innerHTML='<option value="">Selecione o cliente...</option>';
+  Object.entries(dados.clientes).sort((a,b)=>a[1].nome.localeCompare(b[1].nome)).forEach(([k,v])=>{
+    cliSel.innerHTML+=`<option value="${k}">${v.nome}</option>`;
+  });
+  if(cliAtual) cliSel.value=cliAtual;
+  // Tipos
+  const tipSel=$('mServTipo');
+  const tipAtual=tipSel.value;
+  tipSel.innerHTML='<option value="">Selecione o tipo...</option>';
+  Object.values(dados.tipos).sort((a,b)=>a.nome.localeCompare(b.nome)).forEach(t=>{
+    tipSel.innerHTML+=`<option value="${t.nome}">${t.nome}</option>`;
+  });
+  if(tipAtual) tipSel.value=tipAtual;
+}
+
+window.abrirModalServ=id=>{
+  preencherSelects();
+  $('mServId').value=id||'';
+  $('mServTitulo').textContent=id?'Editar Serviço':'Novo Serviço';
+  if(id){
+    const s=dados.servicos[id];
+    $('mServCliente').value=s.clienteId||'';
+    $('mServTipo').value=s.tipo||'';
+    $('mServValor').value=s.valor;
+    $('mServData').value=s.data||'';
+    $('mServObs').value=s.obs||'';
+    $('mServDataPag').value=s.dataPagamento||'';
+    pills={clienteTipo:s.clienteTipo||'fixo',servPago:s.pago||'pendente'};
+  } else {
+    $('mServCliente').value='';$('mServTipo').value='';
+    $('mServValor').value='';$('mServObs').value='';
+    $('mServData').value=new Date().toISOString().split('T')[0];
+    $('mServDataPag').value='';
+    pills={clienteTipo:'fixo',servPago:'pendente'};
+  }
+  syncPills();
+  $('grpDataPag').style.display=pills.servPago==='pago'?'':'none';
+  $('modalServ').classList.add('open');
+};
+window.fecharModalServ=()=>$('modalServ').classList.remove('open');
+
+window.salvarServ=async()=>{
+  const cliId=$('mServCliente').value;
+  const tipo=$('mServTipo').value;
+  const valor=parseFloat($('mServValor').value);
+  const data=$('mServData').value;
+  if(!cliId||!tipo||!valor||!data){alert('Preencha cliente, tipo, valor e data');return;}
+  const cli=dados.clientes[cliId];
+  const item={
+    clienteId:cliId, clienteNome:cli?.nome||'—',
+    tipo, valor, data, mes:data.substring(0,7),
+    clienteTipo:pills.clienteTipo, pago:pills.servPago,
+    dataPagamento:pills.servPago==='pago'?($('mServDataPag').value||data):'',
+    obs:$('mServObs').value.trim(), ts:Date.now()
+  };
+  const eid=$('mServId').value;
+  if(eid) await set(ref(db,'gs_servicos/'+eid),item);
+  else await push(ref(db,'gs_servicos'),item);
+  fecharModalServ();
+};
+window.excluirServ=id=>{if(confirm('Excluir este serviço?'))remove(ref(db,'gs_servicos/'+id));};
+
+window.abrirModalCli=id=>{
+  $('mCliId').value=id||'';
+  $('mCliTitulo').textContent=id?'Editar Cliente':'Novo Cliente';
+  if(id){const c=dados.clientes[id];$('mCliNome').value=c.nome;$('mCliTel').value=c.tel||'';$('mCliObs').value=c.obs||'';}
+  else{$('mCliNome').value='';$('mCliTel').value='';$('mCliObs').value='';}
+  $('modalCli').classList.add('open');
+};
+window.fecharModalCli=()=>$('modalCli').classList.remove('open');
+window.salvarCli=async()=>{
+  const nome=$('mCliNome').value.trim();
+  if(!nome){alert('Digite o nome do cliente');return;}
+  const item={nome,tel:$('mCliTel').value.trim(),obs:$('mCliObs').value.trim(),ts:Date.now()};
+  const eid=$('mCliId').value;
+  if(eid) await set(ref(db,'gs_clientes/'+eid),item);
+  else await push(ref(db,'gs_clientes'),item);
+  fecharModalCli();
+};
+window.excluirCli=id=>{if(confirm('Excluir este cliente?'))remove(ref(db,'gs_clientes/'+id));};
+
+window.abrirModalTipo=id=>{
+  $('mTipoId').value=id||'';
+  $('mTipoTitulo').textContent=id?'Editar Tipo':'Novo Tipo de Serviço';
+  $('mTipoNome').value=id?dados.tipos[id].nome:'';
+  $('modalTipo').classList.add('open');
+};
+window.fecharModalTipo=()=>$('modalTipo').classList.remove('open');
+window.salvarTipo=async()=>{
+  const nome=$('mTipoNome').value.trim();
+  if(!nome){alert('Digite o nome do tipo');return;}
+  const eid=$('mTipoId').value;
+  if(eid) await set(ref(db,'gs_tipos/'+eid),{nome,ts:Date.now()});
+  else await push(ref(db,'gs_tipos'),{nome,ts:Date.now()});
+  fecharModalTipo();
+};
+window.excluirTipo=id=>{if(confirm('Excluir este tipo?'))remove(ref(db,'gs_tipos/'+id));};
+
+// Pills
+window.setPill=(g,v,btn)=>{
+  pills[g]=v;
+  btn.closest('.pill-selector').querySelectorAll('.pill-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  if(g==='servPago') $('grpDataPag').style.display=v==='pago'?'':'none';
+};
+function syncPills(){
+  [['pClienteTipo','clienteTipo'],['pServPago','servPago']].forEach(([pid,key])=>{
+    $(pid)?.querySelectorAll('.pill-btn').forEach(b=>{
+      const m=b.getAttribute('onclick').match(/'([^']+)'\s*,this/);
+      if(m) b.classList.toggle('on',m[1]===pills[key]);
+    });
+  });
+}
+
+// ── INICIALIZAÇÃO ─────────────────────────────────
+onAuthStateChanged(auth,u=>{
+  if(u){
+    user=u;
+    $('tbUser').textContent=u.displayName||u.email;
+    $('authScreen').style.display='none';
+    $('app').style.display='block';
+    // Listeners em tempo real
+    onValue(ref(db,'gs_servicos'),s=>{dados.servicos=s.val()||{};renderAll();});
+    onValue(ref(db,'gs_clientes'),s=>{dados.clientes=s.val()||{};renderAll();});
+    onValue(ref(db,'gs_tipos'),async s=>{
+      dados.tipos=s.val()||{};
+      // Criar tipos padrão se banco vazio
+      if(!s.exists()){
+        for(const t of TIPOS_PADRAO) await push(ref(db,'gs_tipos'),{nome:t,ts:Date.now()});
+      }
+      renderAll();
+    });
+  } else {
+    $('authScreen').style.display='flex';
+    $('app').style.display='none';
+  }
+});
+</script>
+</body>
+</html>
