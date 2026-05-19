@@ -30,9 +30,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .auth-card{background:var(--branco);border-radius:20px;padding:36px 28px;width:100%;max-width:380px;
   box-shadow:0 20px 60px rgba(0,0,0,.2)}
 .auth-logo{text-align:center;margin-bottom:28px}
-.auth-logo .icon{font-size:44px;margin-bottom:8px}
-.auth-logo h1{font-size:22px;font-weight:700;color:var(--az2)}
-.auth-logo p{font-size:13px;color:var(--txt3);margin-top:4px}
 .form-group{margin-bottom:14px}
 .form-group label{font-size:12px;font-weight:600;color:var(--txt3);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
 .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border:1.5px solid var(--borda);border-radius:10px;font-size:14px;color:var(--txt);background:var(--branco);font-family:inherit}
@@ -47,15 +44,11 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 /* ── APP ── */
 #app{display:none;padding-bottom:70px;min-height:100vh}
 .topbar{background:var(--az);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-.topbar h1{color:#fff;font-size:16px;font-weight:700}
-.topbar-sub{color:#93c5fd;font-size:11px;margin-top:1px}
 .user-menu{background:rgba(255,255,255,.15);color:#fff;font-size:12px;padding:4px 10px;border-radius:20px;border:none;cursor:pointer}
-
 .nav-tabs{background:var(--branco);border-bottom:1px solid var(--borda);display:flex;overflow-x:auto;scrollbar-width:none}
 .nav-tabs::-webkit-scrollbar{display:none}
 .tab{padding:11px 14px;font-size:12px;font-weight:500;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:inherit}
 .tab.active{color:var(--az);border-bottom-color:var(--az);font-weight:600}
-
 .page{display:none;padding:14px}
 .page.active{display:block}
 
@@ -110,7 +103,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 
 /* ── HIST ── */
 .hist-card{background:var(--branco);border-radius:12px;border:1px solid var(--borda);margin-bottom:10px;overflow:hidden}
-.hist-hdr{padding:12px 14px;background:#f8fafc;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.hist-hdr{padding:12px 14px;background:#f8fafc;display:flex;justify-content:space-between;align-items:center}
 .hist-hdr h4{font-size:14px;font-weight:600;color:var(--txt)}
 .hist-body{padding:10px 14px}
 .hist-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f3f4f6;font-size:13px}
@@ -130,9 +123,9 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .pill-selector{display:flex;gap:8px;flex-wrap:wrap}
 .pill-btn{padding:6px 14px;border-radius:20px;border:1.5px solid var(--borda);background:var(--branco);cursor:pointer;font-size:13px;font-weight:500;color:var(--txt3);font-family:inherit}
 .pill-btn.on{border-color:var(--az);background:var(--az-light);color:var(--az)}
-
 .empty{text-align:center;padding:36px 20px;color:var(--txt3);font-size:14px}
 .empty-icon{font-size:36px;margin-bottom:8px}
+
 /* Busca cliente */
 .cli-search-wrap{position:relative}
 .cli-search-wrap input{width:100%;padding:10px 12px;border:1.5px solid var(--borda);border-radius:10px;font-size:14px;color:var(--txt);background:var(--branco);font-family:inherit}
@@ -144,10 +137,8 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .cli-opt:hover{background:var(--az-light)}
 .cli-selecionado{background:var(--az-light);border:1.5px solid var(--az);border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;color:var(--az);display:flex;align-items:center;justify-content:space-between}
 .cli-selecionado button{background:none;border:none;color:var(--txt3);cursor:pointer;font-size:16px}
-/* Tag vencimento próximo */
-.tag.vence-hoje{background:#fef3c7;color:#92400e;font-weight:700}
-.tag.vence-breve{background:#dbeafe;color:#1e40af}
-/* Vencimentos card */
+
+/* Vencimentos */
 .venc-card{background:var(--branco);border-radius:10px;border:1px solid var(--borda);padding:10px 14px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;border-left:3px solid var(--am);cursor:pointer}
 .venc-card:hover{background:#fffbeb}
 .venc-card.hoje{border-left-color:var(--vm)}
@@ -157,6 +148,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 .venc-valor{font-size:14px;font-weight:700;color:var(--am);flex-shrink:0;margin-right:8px}
 .btn-pagar-rapido{padding:4px 10px;border-radius:8px;border:1.5px solid var(--vd);color:var(--vd);background:var(--vd-light);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
 .btn-pagar-rapido:hover{background:var(--vd);color:#fff}
+
 .spinner{width:28px;height:28px;border:3px solid var(--borda);border-top-color:var(--az);border-radius:50%;animation:spin .7s linear infinite;margin:20px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
@@ -182,7 +174,6 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
     <div class="form-group"><label>Senha</label><input id="lSenha" type="password" placeholder="••••••••"></div>
     <button class="btn-primary" onclick="fazerLogin()">Entrar →</button>
     <div class="auth-switch" id="authSwitch">Não tem conta? <span onclick="mostrarCadastro()">Criar conta</span></div>
-
     <div id="cadastroForm" style="display:none;margin-top:16px;border-top:1px solid var(--borda);padding-top:16px">
       <div class="form-group"><label>Seu nome</label><input id="cNome" placeholder="Ex: Maria"></div>
       <div class="form-group"><label>E-mail</label><input id="cEmail" type="email" placeholder="seu@email.com"></div>
@@ -234,18 +225,13 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
       <div class="kpi"><div class="lbl">📋 Total</div><div class="val" id="kTotal" style="color:var(--az)">R$ 0</div><div class="sub">faturamento</div></div>
       <div class="kpi"><div class="lbl">👥 Serviços</div><div class="val" id="kServicos" style="color:var(--roxo)">0</div><div class="sub">no mês</div></div>
     </div>
-    <!-- Vencimentos próximos -->
     <h3 style="font-size:13px;font-weight:600;color:var(--txt3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px">📅 Vencimentos nos próximos 7 dias</h3>
     <div id="listaVencimentos" style="margin-bottom:16px"></div>
-    <!-- Por tipo -->
     <h3 style="font-size:13px;font-weight:600;color:var(--txt3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px">Por tipo de serviço</h3>
     <div id="resumoPorTipo"></div>
-    <!-- Fixos vs Esporádicos -->
     <h3 style="font-size:13px;font-weight:600;color:var(--txt3);margin:12px 0 8px;text-transform:uppercase;letter-spacing:.3px">Fixos vs Esporádicos</h3>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="resumoFixos"></div>
   </div>
-
-  <!-- VENCIMENTOS PRÓXIMOS 7 DIAS (no resumo, inserido via JS) -->
 
   <!-- SERVIÇOS -->
   <div class="page" id="page-servicos">
@@ -380,7 +366,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:v
 <script type="module">
 import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import{getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,updateProfile}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import{getDatabase,ref,push,set,get,remove,onValue,query,orderByChild}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+import{getDatabase,ref,push,set,get,remove,onValue}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
 
 const CFG={
   apiKey:'AIzaSyC54FUgmARdcGjy1tOVNerFMPvcBL921MI',
@@ -393,6 +379,18 @@ const app=initializeApp(CFG,'gestao');
 const auth=getAuth(app);
 const db=getDatabase(app);
 
+// ─────────────────────────────────────────────────────────────────
+// CORREÇÃO PRINCIPAL: Todos os paths usam uid do usuário logado.
+// Cada usuário tem seus próprios dados isolados em /usuarios/{uid}/
+// Nenhum dado é compartilhado entre contas diferentes.
+// ─────────────────────────────────────────────────────────────────
+let UID = null;
+const P = {
+  servicos: () => `usuarios/${UID}/servicos`,
+  clientes: () => `usuarios/${UID}/clientes`,
+  tipos:    () => `usuarios/${UID}/tipos`,
+};
+
 const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const R=v=>'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2});
 const mkMes=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
@@ -403,15 +401,18 @@ const $=id=>document.getElementById(id);
 let mesAtual=new Date(), user=null;
 let dados={servicos:{},clientes:{},tipos:{}};
 let pills={clienteTipo:'fixo',servPago:'pendente'};
+let _listeners=[];
 
-// Tipos padrão
 const TIPOS_PADRAO=['Abertura de empresa','Fechamento de empresa','Emissão de notas','Imposto de renda','Regularização de CPF'];
 
 // ── AUTH ──────────────────────────────────────────
 window.mostrarCadastro=()=>{
-  $('cadastroForm').style.display=$('cadastroForm').style.display==='none'?'':'none';
-  $('authSwitch').style.display=$('cadastroForm').style.display==='none'?'':'none';
+  const cf=$('cadastroForm');
+  const sw=$('authSwitch');
+  cf.style.display=cf.style.display==='none'?'block':'none';
+  sw.style.display=cf.style.display==='none'?'':'none';
 };
+
 function showErr(m){$('authErr').textContent=m;$('authErr').style.display='block';}
 
 window.fazerLogin=async()=>{
@@ -428,15 +429,21 @@ window.fazerCadastro=async()=>{
   try{
     const c=await createUserWithEmailAndPassword(auth,e,s);
     await updateProfile(c.user,{displayName:nome});
-    // Criar tipos padrão na primeira vez
-    const snap=await get(ref(db,'gs_tipos'));
-    if(!snap.exists()){
-      for(const t of TIPOS_PADRAO) await push(ref(db,'gs_tipos'),{nome:t,ts:Date.now()});
-    }
+    // Tipos padrão criados APENAS no espaço deste usuário após login
+    // (tratado no onAuthStateChanged)
   }catch(err){showErr(err.code==='auth/email-already-in-use'?'E-mail já cadastrado':'Erro ao criar conta.');}
 };
 
-window.sair=()=>{if(confirm('Sair?'))signOut(auth);};
+window.sair=()=>{
+  if(confirm('Sair?')){
+    // Remove listeners antes de deslogar para evitar erros
+    _listeners.forEach(unsub=>{ try{unsub();}catch(e){} });
+    _listeners=[];
+    dados={servicos:{},clientes:{},tipos:{}};
+    UID=null;
+    signOut(auth);
+  }
+};
 
 // ── NAVEGAÇÃO ─────────────────────────────────────
 window.showPage=btn=>{
@@ -465,17 +472,14 @@ function renderVencimentos(){
   const hoje=new Date(); hoje.setHours(0,0,0,0);
   const em7=new Date(hoje); em7.setDate(hoje.getDate()+7);
   const el=$('listaVencimentos'); if(!el) return;
-
   const venc=Object.entries(dados.servicos)
     .map(([k,v])=>({...v,id:k}))
     .filter(s=>{
-      if(s.pago==='pago') return false;
-      if(!s.data) return false;
+      if(s.pago==='pago'||!s.data) return false;
       const d=new Date(s.data+'T00:00:00');
-      return d>=hoje && d<=em7;
+      return d>=hoje&&d<=em7;
     })
     .sort((a,b)=>a.data.localeCompare(b.data));
-
   if(!venc.length){
     el.innerHTML='<div style="font-size:13px;color:var(--txt3);padding:8px 0">Nenhum vencimento nos próximos 7 dias 🎉</div>';
     return;
@@ -483,15 +487,15 @@ function renderVencimentos(){
   el.innerHTML=venc.map(s=>{
     const d=new Date(s.data+'T00:00:00');
     const isHoje=d.getTime()===hoje.getTime();
-    const diffDias=Math.round((d-hoje)/(86400000));
+    const diffDias=Math.round((d-hoje)/86400000);
     const label=isHoje?'Vence hoje!':`Em ${diffDias} dia${diffDias!==1?'s':''}`;
-    return `<div class="venc-card${isHoje?' hoje':''}" onclick="togglePago('${s.id}','${s.pago}')">
+    return `<div class="venc-card${isHoje?' hoje':''}">
       <div class="venc-info">
         <div class="venc-nome">${s.clienteNome}</div>
         <div class="venc-meta">${s.tipo} · ${s.data} · <strong style="color:${isHoje?'var(--vm)':'var(--am)'}">${label}</strong></div>
       </div>
-      <span class="venc-valor">${'R$ '+Number(s.valor).toLocaleString('pt-BR',{minimumFractionDigits:2})}</span>
-      <button class="btn-pagar-rapido" onclick="event.stopPropagation();togglePago('${s.id}','${s.pago}')">✅ Pagar</button>
+      <span class="venc-valor">${R(s.valor)}</span>
+      <button class="btn-pagar-rapido" onclick="togglePago('${s.id}','${s.pago}')">✅ Pagar</button>
     </div>`;
   }).join('');
 }
@@ -511,20 +515,11 @@ function renderResumo(mk){
   $('kPendente').textContent=R(pendente);
   $('kTotal').textContent=R(recebido+pendente);
   $('kServicos').textContent=servs.length;
-
-  // Por tipo
   const porTipo={};
   servs.forEach(s=>{porTipo[s.tipo]=(porTipo[s.tipo]||0)+s.valor;});
-  const tiposEl=$('resumoPorTipo');
-  tiposEl.innerHTML=Object.keys(porTipo).length?Object.entries(porTipo).map(([t,v])=>`
-    <div class="hist-card" style="margin-bottom:8px">
-      <div class="hist-row" style="padding:10px 14px;border:none">
-        <span style="font-size:13px;font-weight:500">${t||'—'}</span>
-        <span style="font-weight:700;color:var(--az)">${R(v)}</span>
-      </div>
-    </div>`).join(''):'<div class="empty" style="padding:20px"><div class="empty-icon">📊</div>Nenhum serviço neste mês</div>';
-
-  // Fixos vs Esporádicos
+  $('resumoPorTipo').innerHTML=Object.keys(porTipo).length
+    ?Object.entries(porTipo).map(([t,v])=>`<div class="hist-card" style="margin-bottom:8px"><div class="hist-row" style="padding:10px 14px;border:none"><span style="font-size:13px;font-weight:500">${t||'—'}</span><span style="font-weight:700;color:var(--az)">${R(v)}</span></div></div>`).join('')
+    :'<div class="empty" style="padding:20px"><div class="empty-icon">📊</div>Nenhum serviço neste mês</div>';
   const fixoV=servs.filter(s=>s.clienteTipo==='fixo').reduce((t,s)=>t+s.valor,0);
   const espV=servs.filter(s=>s.clienteTipo==='esporadico').reduce((t,s)=>t+s.valor,0);
   $('resumoFixos').innerHTML=`
@@ -549,7 +544,7 @@ function renderServicos(mk){
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
         <span class="serv-valor">${R(s.valor)}</span>
-        <button class="btn-pago-toggle ${s.pago}" onclick="togglePago('${s.id}','${s.pago}')" title="${s.pago==='pendente'?'Clique para marcar como pago':'Clique para marcar como pendente'}">
+        <button class="btn-pago-toggle ${s.pago}" onclick="togglePago('${s.id}','${s.pago}')">
           ${s.pago==='pago'?'✅ Pago':'⏳ Toque para pagar'}
         </button>
       </div>
@@ -564,7 +559,7 @@ window.togglePago=async(id,atual)=>{
   const novo=atual==='pago'?'pendente':'pago';
   const original=dados.servicos[id];
   if(!original) return;
-  const item={
+  await set(ref(db,P.servicos()+'/'+id),{
     clienteId:original.clienteId||'',
     clienteNome:original.clienteNome||'',
     tipo:original.tipo||'',
@@ -576,8 +571,7 @@ window.togglePago=async(id,atual)=>{
     ts:original.ts||Date.now(),
     pago:novo,
     dataPagamento:novo==='pago'?new Date().toISOString().split('T')[0]:(original.dataPagamento||'')
-  };
-  await set(ref(db,'gs_servicos/'+id),item);
+  });
 };
 
 window.renderClientes=()=>{
@@ -627,10 +621,7 @@ function renderHistorico(){
     const rec=servs.filter(s=>s.pago==='pago').reduce((t,s)=>t+s.valor,0);
     const pend=servs.filter(s=>s.pago==='pendente').reduce((t,s)=>t+s.valor,0);
     return `<div class="hist-card">
-      <div class="hist-hdr">
-        <h4>${MESES[+m-1]} ${ano}</h4>
-        <span style="font-weight:700;color:var(--az)">${R(rec+pend)}</span>
-      </div>
+      <div class="hist-hdr"><h4>${MESES[+m-1]} ${ano}</h4><span style="font-weight:700;color:var(--az)">${R(rec+pend)}</span></div>
       <div class="hist-body">
         <div class="hist-row"><span>✅ Recebido</span><span style="color:var(--vd);font-weight:600">${R(rec)}</span></div>
         <div class="hist-row"><span>⏳ Pendente</span><span style="color:var(--am);font-weight:600">${R(pend)}</span></div>
@@ -640,26 +631,19 @@ function renderHistorico(){
   }).join('');
 }
 
-// ── MODAIS ────────────────────────────────────────
-// ── BUSCA DE CLIENTE ──────────────────────────────
-let _cliSelecionadoId='', _cliSelecionadoNome='';
-
+// ── BUSCA CLIENTE (modal) ─────────────────────────
 window.filtrarClientes=()=>{
   const q=$('cliSearchInput').value.toLowerCase();
   const dd=$('cliDropdown');
   const clis=Object.entries(dados.clientes)
     .filter(([,v])=>v.nome.toLowerCase().includes(q))
     .sort((a,b)=>a[1].nome.localeCompare(b[1].nome));
-  dd.innerHTML=clis.map(([k,v])=>`<div class="cli-opt" onmousedown="selecionarCliente('${k}','${v.nome}')">${v.nome}</div>`).join('') || '<div class="cli-opt" style="color:var(--txt3)">Nenhum cliente encontrado</div>';
+  dd.innerHTML=clis.map(([k,v])=>`<div class="cli-opt" onmousedown="selecionarCliente('${k}','${v.nome}')">${v.nome}</div>`).join('')||'<div class="cli-opt" style="color:var(--txt3)">Nenhum cliente encontrado</div>';
   dd.classList.add('open');
 };
-window.abrirDropCli=()=>{
-  $('cliSearchInput').value='';
-  filtrarClientes();
-};
+window.abrirDropCli=()=>{$('cliSearchInput').value='';filtrarClientes();};
 window.fecharDropCli=()=>$('cliDropdown').classList.remove('open');
 window.selecionarCliente=(id,nome)=>{
-  _cliSelecionadoId=id; _cliSelecionadoNome=nome;
   $('mServCliente').value=id;
   $('cliSelecionadoNome').textContent=nome;
   $('cliSelecionadoWrap').style.display='flex';
@@ -667,7 +651,6 @@ window.selecionarCliente=(id,nome)=>{
   fecharDropCli();
 };
 window.limparCliente=()=>{
-  _cliSelecionadoId=''; _cliSelecionadoNome='';
   $('mServCliente').value='';
   $('cliSelecionadoWrap').style.display='none';
   $('cliSearchWrap').style.display='';
@@ -675,7 +658,6 @@ window.limparCliente=()=>{
 };
 
 function preencherSelects(){
-  // Tipos apenas
   const tipSel=$('mServTipo');
   const tipAtual=tipSel.value;
   tipSel.innerHTML='<option value="">Selecione o tipo...</option>';
@@ -685,16 +667,15 @@ function preencherSelects(){
   if(tipAtual) tipSel.value=tipAtual;
 }
 
+// ── MODAIS ────────────────────────────────────────
 window.abrirModalServ=id=>{
   preencherSelects();
   $('mServId').value=id||'';
   $('mServTitulo').textContent=id?'Editar Serviço':'Novo Serviço';
   if(id){
     const s=dados.servicos[id];
-    // Preencher cliente
-    if(s.clienteId&&dados.clientes[s.clienteId]){
-      selecionarCliente(s.clienteId,dados.clientes[s.clienteId].nome);
-    } else { limparCliente(); }
+    if(s.clienteId&&dados.clientes[s.clienteId]) selecionarCliente(s.clienteId,dados.clientes[s.clienteId].nome);
+    else limparCliente();
     $('mServTipo').value=s.tipo||'';
     $('mServValor').value=s.valor;
     $('mServData').value=s.data||'';
@@ -703,8 +684,7 @@ window.abrirModalServ=id=>{
     pills={clienteTipo:s.clienteTipo||'fixo',servPago:s.pago||'pendente'};
   } else {
     limparCliente();
-    $('mServTipo').value='';
-    $('mServValor').value='';$('mServObs').value='';
+    $('mServTipo').value='';$('mServValor').value='';$('mServObs').value='';
     $('mServData').value=new Date().toISOString().split('T')[0];
     $('mServDataPag').value='';
     pills={clienteTipo:'fixo',servPago:'pendente'};
@@ -726,33 +706,31 @@ window.salvarServ=async()=>{
   if(!cliId||!tipo||!valor||!data){alert('Preencha cliente, tipo, valor e data');return;}
   const cli=dados.clientes[cliId];
   const item={
-    clienteId:cliId, clienteNome:cli?.nome||'—',
-    tipo, valor, data, mes:data.substring(0,7),
-    clienteTipo:pills.clienteTipo, pago:pills.servPago,
+    clienteId:cliId,clienteNome:cli?.nome||'—',
+    tipo,valor,data,mes:data.substring(0,7),
+    clienteTipo:pills.clienteTipo,pago:pills.servPago,
     dataPagamento:pills.servPago==='pago'?($('mServDataPag').value||data):'',
-    obs:$('mServObs').value.trim(), ts:Date.now()
+    obs:$('mServObs').value.trim(),ts:Date.now()
   };
   const eid=$('mServId').value;
   if(eid){
-    await set(ref(db,'gs_servicos/'+eid),item);
+    await set(ref(db,P.servicos()+'/'+eid),item);
   } else {
-    await push(ref(db,'gs_servicos'),item);
-    // Replicar meses futuros se fixo
+    await push(ref(db,P.servicos()),item);
     if(pills.clienteTipo==='fixo'&&$('chkReplicar')?.checked){
       const meses=parseInt($('mesesRep')?.value||12);
       const [ano,mes,dia]=data.split('-');
       for(let i=1;i<=meses;i++){
         const d=new Date(+ano,+mes-1+i,+dia);
-        // Ajustar dia se mês não tem o dia (ex: 31 em fevereiro)
         if(d.getDate()!==+dia) d.setDate(0);
         const novaData=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-        await push(ref(db,'gs_servicos'),{...item,data:novaData,mes:novaData.substring(0,7),pago:'pendente',dataPagamento:'',ts:Date.now()+i});
+        await push(ref(db,P.servicos()),{...item,data:novaData,mes:novaData.substring(0,7),pago:'pendente',dataPagamento:'',ts:Date.now()+i});
       }
     }
   }
   fecharModalServ();
 };
-window.excluirServ=id=>{if(confirm('Excluir este serviço?'))remove(ref(db,'gs_servicos/'+id));};
+window.excluirServ=id=>{if(confirm('Excluir este serviço?'))remove(ref(db,P.servicos()+'/'+id));};
 
 window.abrirModalCli=id=>{
   $('mCliId').value=id||'';
@@ -767,11 +745,11 @@ window.salvarCli=async()=>{
   if(!nome){alert('Digite o nome do cliente');return;}
   const item={nome,tel:$('mCliTel').value.trim(),obs:$('mCliObs').value.trim(),ts:Date.now()};
   const eid=$('mCliId').value;
-  if(eid) await set(ref(db,'gs_clientes/'+eid),item);
-  else await push(ref(db,'gs_clientes'),item);
+  if(eid) await set(ref(db,P.clientes()+'/'+eid),item);
+  else await push(ref(db,P.clientes()),item);
   fecharModalCli();
 };
-window.excluirCli=id=>{if(confirm('Excluir este cliente?'))remove(ref(db,'gs_clientes/'+id));};
+window.excluirCli=id=>{if(confirm('Excluir este cliente?'))remove(ref(db,P.clientes()+'/'+id));};
 
 window.abrirModalTipo=id=>{
   $('mTipoId').value=id||'';
@@ -784,11 +762,11 @@ window.salvarTipo=async()=>{
   const nome=$('mTipoNome').value.trim();
   if(!nome){alert('Digite o nome do tipo');return;}
   const eid=$('mTipoId').value;
-  if(eid) await set(ref(db,'gs_tipos/'+eid),{nome,ts:Date.now()});
-  else await push(ref(db,'gs_tipos'),{nome,ts:Date.now()});
+  if(eid) await set(ref(db,P.tipos()+'/'+eid),{nome,ts:Date.now()});
+  else await push(ref(db,P.tipos()),{nome,ts:Date.now()});
   fecharModalTipo();
 };
-window.excluirTipo=id=>{if(confirm('Excluir este tipo?'))remove(ref(db,'gs_tipos/'+id));};
+window.excluirTipo=id=>{if(confirm('Excluir este tipo?'))remove(ref(db,P.tipos()+'/'+id));};
 
 // Pills
 window.setPill=(g,v,btn)=>{
@@ -801,12 +779,8 @@ window.setPill=(g,v,btn)=>{
     $('grpReplicar').style.display=(v==='fixo'&&isNew)?'':'none';
   }
 };
-
-// checkbox replicar
 document.addEventListener('change',e=>{
-  if(e.target.id==='chkReplicar'){
-    $('grpMesesRep').style.display=e.target.checked?'':'none';
-  }
+  if(e.target.id==='chkReplicar') $('grpMesesRep').style.display=e.target.checked?'':'none';
 });
 function syncPills(){
   [['pClienteTipo','clienteTipo'],['pServPago','servPago']].forEach(([pid,key])=>{
@@ -818,23 +792,27 @@ function syncPills(){
 }
 
 // ── INICIALIZAÇÃO ─────────────────────────────────
-onAuthStateChanged(auth,u=>{
+onAuthStateChanged(auth,async u=>{
   if(u){
     user=u;
+    UID=u.uid; // ← UID definido aqui, antes de qualquer acesso ao banco
+
     $('tbUser').textContent=u.displayName||u.email;
     $('authScreen').style.display='none';
     $('app').style.display='block';
-    // Listeners em tempo real
-    onValue(ref(db,'gs_servicos'),s=>{dados.servicos=s.val()||{};renderAll();});
-    onValue(ref(db,'gs_clientes'),s=>{dados.clientes=s.val()||{};renderAll();});
-    onValue(ref(db,'gs_tipos'),async s=>{
-      dados.tipos=s.val()||{};
-      // Criar tipos padrão se banco vazio
-      if(!s.exists()){
-        for(const t of TIPOS_PADRAO) await push(ref(db,'gs_tipos'),{nome:t,ts:Date.now()});
-      }
-      renderAll();
-    });
+
+    // Criar tipos padrão APENAS para este usuário se ainda não existirem
+    const snapTipos=await get(ref(db,P.tipos()));
+    if(!snapTipos.exists()){
+      for(const t of TIPOS_PADRAO) await push(ref(db,P.tipos()),{nome:t,ts:Date.now()});
+    }
+
+    // Listeners em tempo real — isolados por UID
+    const u1=onValue(ref(db,P.servicos()),s=>{dados.servicos=s.val()||{};renderAll();});
+    const u2=onValue(ref(db,P.clientes()),s=>{dados.clientes=s.val()||{};renderAll();});
+    const u3=onValue(ref(db,P.tipos()),s=>{dados.tipos=s.val()||{};renderAll();});
+    _listeners=[u1,u2,u3];
+
   } else {
     $('authScreen').style.display='flex';
     $('app').style.display='none';
@@ -842,45 +820,37 @@ onAuthStateChanged(auth,u=>{
 });
 </script>
 
-  <!-- Botão instalar app -->
-  <div id="btnInstalar" style="display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
-    background:#1a56db;color:#fff;padding:10px 20px;border-radius:24px;font-size:13px;font-weight:600;
-    align-items:center;gap:8px;box-shadow:0 4px 16px rgba(26,86,219,.4);cursor:pointer;z-index:300;
-    white-space:nowrap;border:none;font-family:inherit" onclick="instalarApp()">
-    📲 Instalar o app
-  </div>
+<!-- Botão instalar app -->
+<div id="btnInstalar" style="display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:#1a56db;color:#fff;padding:10px 20px;border-radius:24px;font-size:13px;font-weight:600;
+  align-items:center;gap:8px;box-shadow:0 4px 16px rgba(26,86,219,.4);cursor:pointer;z-index:300;
+  white-space:nowrap;border:none;font-family:inherit" onclick="instalarApp()">
+  📲 Instalar o app
+</div>
 
 <script>
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js')
-      .then(r=>console.log('SW registrado'))
-      .catch(e=>console.log('SW erro:',e));
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
   });
 }
-
-// Banner "Adicionar à tela inicial"
 let deferredPrompt;
-window.addEventListener('beforeinstallprompt', e=>{
+window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault();
-  deferredPrompt = e;
-  // Mostrar botão de instalar após 3 segundos se ainda não instalou
+  deferredPrompt=e;
   setTimeout(()=>{
-    if(deferredPrompt && document.getElementById('btnInstalar')){
-      document.getElementById('btnInstalar').style.display='flex';
-    }
-  }, 3000);
+    if(deferredPrompt) document.getElementById('btnInstalar').style.display='flex';
+  },3000);
 });
 window.instalarApp=async()=>{
   if(!deferredPrompt) return;
   deferredPrompt.prompt();
-  const {outcome} = await deferredPrompt.userChoice;
-  deferredPrompt = null;
+  await deferredPrompt.userChoice;
+  deferredPrompt=null;
   document.getElementById('btnInstalar').style.display='none';
 };
-window.addEventListener('appinstalled', ()=>{
-  const b=document.getElementById('btnInstalar');
-  if(b) b.style.display='none';
+window.addEventListener('appinstalled',()=>{
+  document.getElementById('btnInstalar').style.display='none';
 });
 </script>
 </body>
